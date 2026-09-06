@@ -1,0 +1,22 @@
+﻿# Data and build artifacts - rebuild with scripts/build_index.py
+data/
+*.csv
+*.faiss
+*.jsonl
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+
+# Secrets
+.env
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

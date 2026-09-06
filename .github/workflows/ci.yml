@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          # torch is the heaviest dependency and no test needs it: the API
+          # tests stub retrieval, and the guardrail is pure Python. Installing
+          # the CPU wheel index keeps this job in the low minutes.
+          pip install fastapi pydantic pytest httpx ruff
+
+      - name: Lint
+        run: ruff check app/ tests/ eval/ scripts/
+
+      - name: Test
+        run: pytest tests/ -q --tb=short
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Builds the image for real. Without this the Dockerfile is an untested
+      # text file that claims to work.
+      - name: Build image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          tags: clinical-trial-rag:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

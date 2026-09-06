@@ -1,0 +1,86 @@
+{
+  "summary": {
+    "queries": 6,
+    "k": 5,
+    "mean_precision_at_k": 0.867,
+    "mean_retrieval_ms": 13.2,
+    "grounded_rate": 1.0,
+    "mean_overlap": 0.972,
+    "answers_with_fabricated_ids": 0,
+    "mean_generation_ms": 2253.0
+  },
+  "per_query": [
+    {
+      "query": "breast cancer, stage II, HER2 positive",
+      "precision_at_k": 1.0,
+      "top_score": 0.864,
+      "retrieval_ms": 24.7,
+      "generation_ms": 2195.0,
+      "grounded": true,
+      "overlap": 0.833,
+      "cited": 1,
+      "hallucinated_ids": [],
+      "answer_chars": 134
+    },
+    {
+      "query": "non-small cell lung cancer with EGFR mutation",
+      "precision_at_k": 1.0,
+      "top_score": 0.7986,
+      "retrieval_ms": 11.4,
+      "generation_ms": 4716.0,
+      "grounded": true,
+      "overlap": 1.0,
+      "cited": 3,
+      "hallucinated_ids": [],
+      "answer_chars": 351
+    },
+    {
+      "query": "metastatic melanoma, BRAF V600E",
+      "precision_at_k": 1.0,
+      "top_score": 0.6909,
+      "retrieval_ms": 10.7,
+      "generation_ms": 2566.0,
+      "grounded": true,
+      "overlap": 1.0,
+      "cited": 1,
+      "hallucinated_ids": [],
+      "answer_chars": 212
+    },
+    {
+      "query": "colorectal cancer, stage III",
+      "precision_at_k": 0.8,
+      "top_score": 0.7569,
+      "retrieval_ms": 11.1,
+      "generation_ms": 1335.0,
+      "grounded": true,
+      "overlap": 1.0,
+      "cited": 1,
+      "hallucinated_ids": [],
+      "answer_chars": 59
+    },
+    {
+      "query": "prostate cancer, BRCA2 mutation",
+      "precision_at_k": 0.4,
+      "top_score": 0.7186,
+      "retrieval_ms": 10.7,
+      "generation_ms": 995.0,
+      "grounded": true,
+      "overlap": 1.0,
+      "cited": 1,
+      "hallucinated_ids": [],
+      "answer_chars": 13
+    },
+    {
+      "query": "pancreatic cancer, stage IV",
+      "precision_at_k": 1.0,
+      "top_score": 0.7527,
+      "retrieval_ms": 10.8,
+      "generation_ms": 1712.0,
+      "grounded": true,
+      "overlap": 1.0,
+      "cited": 1,
+      "hallucinated_ids": [],
+      "answer_chars": 82
+    }
+  ]
+}
