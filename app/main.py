@@ -12,9 +12,11 @@ import json
 import logging
 import time
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import StreamingResponse
+from fastapi.staticfiles import StaticFiles
 
 from . import guardrail
 from .config import settings
@@ -150,3 +152,18 @@ def answer(req: AnswerRequest) -> StreamingResponse:
         media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )
+
+
+# ---------------------------------------------------------------------------
+# Static frontend
+#
+# Mounted last so it cannot shadow the API routes above. Only mounted if the
+# build output exists, so running the API alone (in dev, or in CI) does not
+# require a frontend build to have happened.
+# ---------------------------------------------------------------------------
+_WEB_DIST = Path(__file__).resolve().parents[1] / "web" / "dist"
+if _WEB_DIST.is_dir():
+    app.mount("/", StaticFiles(directory=_WEB_DIST, html=True), name="web")
+    log.info("serving frontend from %s", _WEB_DIST)
+else:
+    log.info("no frontend build at %s — API only", _WEB_DIST)

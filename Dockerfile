@@ -1,6 +1,14 @@
-# Multi-stage: the build stage compiles wheels, the runtime stage carries none
-# of the toolchain. Matters here because torch and faiss pull in large build
-# dependencies that have no business in a running container.
+# Three stages. The web and python build stages carry toolchains — node, gcc —
+# that have no business in a running container; only their outputs are copied
+# into the runtime image.
+
+FROM node:22-slim AS web
+WORKDIR /web
+COPY web/package*.json ./
+RUN npm ci
+COPY web/ ./
+RUN npm run build
+
 
 FROM python:3.12-slim AS builder
 
@@ -24,6 +32,7 @@ COPY --from=builder /install /usr/local
 COPY app/ ./app/
 COPY scripts/ ./scripts/
 COPY eval/ ./eval/
+COPY --from=web /web/dist ./web/dist
 
 # Cache the sentence-transformer weights into the image so a cold start does
 # not depend on Hugging Face being reachable.
