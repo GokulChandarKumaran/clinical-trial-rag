@@ -36,6 +36,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Required for the GitHub Actions cache backend below: the default buildx
+      # driver on the runner is `docker`, which cannot export a cache, and the
+      # build fails with "Cache export is not supported for the docker driver".
+      - uses: docker/setup-buildx-action@v3
+
       # Builds the image for real. Without this the Dockerfile is an untested
       # text file that claims to work.
       - name: Build image

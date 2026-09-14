@@ -26,9 +26,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from app import guardrail                                    # noqa: E402
-from app.generate import build_prompt, get_backend           # noqa: E402
-from app.index import TrialIndex                             # noqa: E402
+from app import guardrail
+from app.generate import build_prompt, get_backend
+from app.index import TrialIndex
 
 QUERIES = [
     ("breast cancer, stage II, HER2 positive", "breast"),

@@ -15,8 +15,6 @@ import logging
 from dataclasses import dataclass
 from pathlib import Path
 
-import numpy as np
-
 from .config import settings
 
 log = logging.getLogger(__name__)
@@ -84,7 +82,7 @@ class TrialIndex:
 
     @classmethod
     def build(cls, docs: list[Doc], model_name: str | None = None,
-              batch_size: int = 256) -> "TrialIndex":
+              batch_size: int = 256) -> TrialIndex:
         import faiss
         from sentence_transformers import SentenceTransformer
 
@@ -124,7 +122,7 @@ class TrialIndex:
 
     @classmethod
     def load(cls, directory: Path | None = None,
-             model_name: str | None = None) -> "TrialIndex":
+             model_name: str | None = None) -> TrialIndex:
         import faiss
         from sentence_transformers import SentenceTransformer
 
@@ -158,7 +156,10 @@ class TrialIndex:
         scores, ids = self.index.search(q, min(fetch, self.index.ntotal))
 
         out: list[tuple[Doc, float]] = []
-        for score, idx in zip(scores[0], ids[0]):
+        # FAISS returns scores and ids with identical shape, so strict= is free
+        # here and turns any future shape mismatch into an error rather than a
+        # silently truncated result set.
+        for score, idx in zip(scores[0], ids[0], strict=True):
             if idx < 0:
                 continue
             doc = self.docs[idx]

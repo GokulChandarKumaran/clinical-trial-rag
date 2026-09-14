@@ -13,7 +13,8 @@ from __future__ import annotations
 
 import logging
 import os
-from typing import Iterator, Protocol
+from collections.abc import Iterator
+from typing import Protocol
 
 from .config import settings
 from .index import Doc
@@ -75,6 +76,7 @@ class LocalBackend:
 
     def stream(self, prompt: str) -> Iterator[str]:
         import threading
+
         from transformers import TextIteratorStreamer
 
         messages = [{"role": "user", "content": prompt}]

@@ -1,0 +1,30 @@
+# Pinned lint surface.
+#
+# CI previously ran bare `ruff check` with no configuration, so the rule set was
+# whatever the latest ruff shipped by default. A ruff release added rules, the
+# lint step started failing on code that had not changed, and because lint runs
+# before pytest the test job stopped running the tests at all -- a green-looking
+# suite that had silently stopped executing.
+#
+# Selecting explicitly means a ruff upgrade can only change behaviour when this
+# file changes.
+
+target-version = "py312"
+line-length = 100
+
+[lint]
+select = [
+    "E",    # pycodestyle
+    "F",    # pyflakes
+    "I",    # import sorting
+    "UP",   # pyupgrade
+    "B",    # bugbear
+    "SIM",  # simplify
+    "RUF",  # ruff-specific
+]
+
+# Not selected, deliberately:
+#   BLE  -- app/main.py catches Exception at the two API boundaries on purpose.
+#           A request handler that lets an arbitrary failure escape kills the SSE
+#           stream with no frame; catching broadly and emitting an `error` event
+#           is the correct behaviour there, and both sites log the exception.
